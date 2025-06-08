@@ -1,7 +1,7 @@
 // api/trust-ach-execute.js
-const crypto = require('crypto');
-const axios = require('axios');
-const sodium = require('libsodium-wrappers');
+import crypto from 'crypto';
+import axios from 'axios';
+import sodium from 'libsodium-wrappers';
 
 function signMessage(message, privateKeyBase64) {
   return (async () => {
@@ -20,7 +20,7 @@ async function logVaultEcho(txData) {
   }
 }
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   let bodyData = '';
 
   for await (const chunk of req) {
@@ -113,4 +113,4 @@ module.exports = async (req, res) => {
     console.error('CDP execution error:', err.response?.data || err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
-} 
+};
