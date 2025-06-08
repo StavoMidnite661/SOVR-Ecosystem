@@ -1,4 +1,4 @@
-// pages/api/trust-ach-execute.js
+// api/trust-ach-execute.js
 const crypto = require('crypto');
 const axios = require('axios');
 const sodium = require('libsodium-wrappers');
@@ -21,6 +21,18 @@ async function logVaultEcho(txData) {
 }
 
 module.exports = async (req, res) => {
+  let bodyData = '';
+
+  for await (const chunk of req) {
+    bodyData += chunk;
+  }
+
+  try {
+    req.body = JSON.parse(bodyData);
+  } catch (err) {
+    return res.status(400).json({ error: 'Invalid JSON body' });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -34,6 +46,10 @@ module.exports = async (req, res) => {
   const keyId = process.env.CDP_KEY_ID;
   const privateKey = process.env.CDP_PRIVATE_KEY;
   const url = `${process.env.CDP_API_URL}/send`;
+
+  if (!keyId || !privateKey || !url) {
+    return res.status(500).json({ error: 'Missing required environment variables' });
+  }
 
   const bondMetadata = {
     'BOND-001': 10000,
@@ -97,4 +113,4 @@ module.exports = async (req, res) => {
     console.error('CDP execution error:', err.response?.data || err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
-};
+} 
