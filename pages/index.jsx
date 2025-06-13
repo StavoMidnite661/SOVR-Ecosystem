@@ -21,7 +21,7 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-8 text-cyan-300 drop-shadow-neon"
         >
-          Welcome to the SOVR Ecosystem
+          Welcome to the SOVR Ecosystems
         </motion.h1>
 
         <motion.p
