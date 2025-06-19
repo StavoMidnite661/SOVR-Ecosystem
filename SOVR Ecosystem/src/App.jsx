@@ -54,6 +54,7 @@ const App = () => {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <h1>Liquidate Credit</h1>
       <div style={{ marginBottom: "1rem" }}>
+        
         <label>
           Transaction Hash:{" "}
           <input
