@@ -6,11 +6,11 @@ async function liquidateCredit(txHash: string, isBmo = true) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       txHash,
-      psik_auth: 'TRUST-AUTH-SOVR',
+      psik_auth: process.env.REACT_APP_PSIK_AUTH || 'TRUST-AUTH-SOVR',
       manualApprove: true,
     }),
   });
-  const result = await response.json();
+  const result: any = await response.json();
   if (result.success) {
     if (window.confirm(`Approve ACH payout to ${isBmo ? 'BMO' : 'Valley Strong'}?`)) {
       await fetch(`/api/${isBmo ? 'trust-ach-execute-bmo' : 'trust-ach-execute-val'}`, {
@@ -18,7 +18,7 @@ async function liquidateCredit(txHash: string, isBmo = true) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           txHash,
-          psik_auth: 'TRUST-AUTH-SOVR',
+          psik_auth: process.env.REACT_APP_PSIK_AUTH || 'TRUST-AUTH-SOVR',
           manualApprove: true,
           approved: true,
         }),
@@ -29,6 +29,76 @@ async function liquidateCredit(txHash: string, isBmo = true) {
     alert(result.message || 'Error');
   }
 }
+<<<<<<< SEARCH
+  const [txHash, setTxHash] = useState('');
+  const [isBmo, setIsBmo] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!txHash) {
+      alert('Please enter a transaction hash.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await liquidateCredit(txHash, isBmo);
+    } catch (error) {
+      alert('An error occurred: ' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Liquidate Credit</h1>
+      <div style={{ marginBottom: '1rem' }}>
+        <label>
+          Transaction Hash:{' '}
+          <input
+            type="text"
+            value={txHash}
+            onChange={(e) => setTxHash(e.target.value)}
+            style={{ width: '300px' }}
+            disabled={loading}
+          />
+        </label>
+      </div>
+=======
+  const [txHash, setTxHash] = useState('');
+  const [isBmo, setIsBmo] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!txHash) {
+      alert('Please enter a transaction hash.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await liquidateCredit(txHash, isBmo);
+    } catch (error) {
+      alert('An error occurred: ' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Liquidate Credit</h1>
+      <div style={{ marginBottom: '1rem' }}>
+        <label>
+          Transaction Hash:{' '}
+          <input
+            type="text"
+            value={txHash}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTxHash(e.target.value)}
+            style={{ width: '300px' }}
+            disabled={loading}
+          />
+        </label>
+      </div>
 
 const App: React.FC = () => {
   const [txHash, setTxHash] = useState('');
